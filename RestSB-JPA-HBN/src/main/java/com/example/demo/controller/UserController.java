@@ -9,25 +9,38 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.UserRepo;
+import com.example.demo.dao.UserRepo;
 import com.example.demo.model.User;
+import com.example.demo.service.UserService;
 
 @RestController
-@RequestMapping("/Users")
+@RequestMapping("/user")
 public class UserController {
 	@Autowired
-	UserRepo repo;
+	UserService userService;
 	@RequestMapping("/all")
 	public List<User> getUsers(){
-		return repo.findAll();
+		return userService.getUsers();
 	}
-	@PostMapping("/add")
+	@RequestMapping(value="/add", method = RequestMethod.POST)
 	public ResponseEntity<String> addUser(@RequestBody User user) {
-		repo.save(user);
-		return new ResponseEntity<String>("Added user: "+ user.getfName(),HttpStatus.OK);
+		return userService.addUser(user);
 	}
-	@PutMapping("/update")
-	public void updateUser(@RequestBody User user) {
-		repo.save(user);
+	@PutMapping("/update/{id}")
+	public void updateUser(@PathVariable String id, @RequestBody User user) {
+		userService.updateUser(id,user);
 	}
+	@PutMapping("/delete/{id}")
+	public void deleteUser(@PathVariable String id) {
+		userService.deleteUser(id);
+	}
+	@RequestMapping("/get/{id}")
+	public void getUserById(@PathVariable String id) {
+		userService.getUserById(id);
+	}
+	@RequestMapping("/get/{name}")
+	public void findByName(@PathVariable String name) {
+		userService.findByName(name);
+	}
+	
 }
