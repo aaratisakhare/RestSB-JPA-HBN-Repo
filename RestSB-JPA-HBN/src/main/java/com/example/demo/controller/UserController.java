@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,19 +25,19 @@ public class UserController {
 		return userService.getUsers();
 	}
 	@RequestMapping(value="/add", method = RequestMethod.POST)
-	public ResponseEntity<String> addUser(@RequestBody User user) {
+	public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
 		return userService.addUser(user);
 	}
-	@PutMapping("/update/{id}")
-	public void updateUser(@PathVariable String id, @RequestBody User user) {
-		userService.updateUser(id,user);
+	@PutMapping("/update")
+	public void updateUser( @RequestBody User user) {
+		userService.addUser(user);
 	}
 	@PutMapping("/delete/{id}")
-	public void deleteUser(@PathVariable String id) {
+	public void deleteUser(@PathVariable Long id) {
 		userService.deleteUser(id);
 	}
 	@RequestMapping("/get/{id}")
-	public void getUserById(@PathVariable String id) {
+	public void getUserById(@PathVariable Long id) {
 		userService.getUserById(id);
 	}
 	@RequestMapping("/get/{name}")

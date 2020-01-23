@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import com.example.demo.dao.UserRepo;
 import com.example.demo.model.User;
 
-
 public class UserService {
 	@Autowired
 	UserRepo repo;
@@ -15,23 +14,29 @@ public class UserService {
 	public List<User> getUsers(){
 		return repo.findAll();
 	}
-	public ResponseEntity<?> addUser(User user) {
-		repo.save(user);
-		return new ResponseEntity<User>(user,HttpStatus.OK);
+	public ResponseEntity<User> addUser(User user) {
+		User user1=repo.save(user);
+		return new ResponseEntity<User>(user1,HttpStatus.OK);
 	}
-	public ResponseEntity<User> updateUser(String id,User user) {
+	public ResponseEntity<User> deleteUser(Long id) {
+		User user1 = null;
 		if(repo.existsById(id)) {
-			repo.u
-		}else {
-			
+			User user =  repo.getOne(id);
+			user.setDeleted(true);
+			user1=repo.save(user);
+			return new ResponseEntity<User>(user1,HttpStatus.OK);
 		}
-		return new ResponseEntity<User>(user,HttpStatus.OK);
+		return new ResponseEntity<User>(user1,HttpStatus.NOT_FOUND);
 	}
-	public void deleteUser(String id) {
-		
-	}
-	public User getUserById(String id) {
-		return repo.getOne(id);
+	public ResponseEntity<User> getUserById(Long id) {
+		User user = null;
+		if(repo.existsById(id)) {
+			user =  repo.getOne(id);
+			return new ResponseEntity<User>(user,HttpStatus.OK);
+		}
+		else{  
+			return new ResponseEntity<User>(user,HttpStatus.NOT_FOUND);
+		}
 	}
 	public User findByName(String name) {
 		return repo.findByName(name);

@@ -3,6 +3,9 @@ package com.example.demo.model;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "UserTable", catalog = "mydb")
@@ -10,10 +13,14 @@ public class User {
 	private String username;
 	@Id
 	@Column(name="user_id")
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 	private String fName;
 	@Column(name="user_pwd")
+	@NotBlank(message = "Invalid password")
+	@Size(min = 8,max=15)
 	private String pwd;
+	@Email(message = "Email Id is not valid")
 	@Column(name="emailid")
 	private String email;
 	@Column(name="isDeleted")
@@ -22,7 +29,7 @@ public class User {
 	private boolean active;
 	@Column(name="createdDate")
 	private Date created;
-	public User(String username, String id, String fName, String pwd, String email) {
+	public User(String username, long id, String fName, String pwd, String email) {
 		//super();
 		this.username = username;
 		this.id = id;
@@ -41,10 +48,10 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getfName() {
